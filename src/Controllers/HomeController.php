@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Helpers\Registry;
 use App\Controllers\BaseController;
 
 class HomeController extends BaseController
@@ -32,7 +33,7 @@ class HomeController extends BaseController
 
         return $this->view->use('home.php', [
             'products' => $products,
-            'hope' => 'sw'
+            'paypalClient' => Registry::get('paypal.client'),
         ]);
     }
 }
