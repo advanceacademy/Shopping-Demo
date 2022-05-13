@@ -2,17 +2,22 @@
 
 namespace App;
 
-use App\Helpers\Router;
 use App\Helpers\Application;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-$router = new Router;
-$router->group(['controller' => '\App\Controllers\HomeController', 'prefix' => '/'], [
+$app = new Application(__DIR__);
+
+$app->routeGroup('/', '\App\Controllers\HomeController', [
     ['GET',    '',         'index'],
 ]);
 
-$router->group(['controller' => '\App\Controllers\UserController', 'prefix' => '/api/users'], [
+$app->route('GET', '/info', function() {
+    phpinfo();
+    die;
+});
+
+$app->routeGroup('/api/users/', '\App\Controllers\UserController', [
     ['POST',   '',         'store'],
     ['GET',    '',         'listUsers'],
     ['GET',    '[i:id]',   'show'],
@@ -24,5 +29,4 @@ $router->group(['controller' => '\App\Controllers\UserController', 'prefix' => '
     ['POST',   'reset',    'reset'],
 ]);
 
-$app = new Application($router, __DIR__);
-$app->run($router);
+$app->run();

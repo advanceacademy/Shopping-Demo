@@ -16,13 +16,16 @@ class Application
     protected $root = __DIR__;
     protected $router = null;
 
-    public function __construct(Router $router, string $root = __DIR__)
+    public function __construct(string $root = __DIR__)
     {
-        $this->router = $router;
+        $this->router = new Router;
         $this->root = $root;
         $this->loadSettings();
     }
 
+    /**
+     * Run application
+     */
     public function run()
     {
         $match = $this->router->match(rtrim($_SERVER['REQUEST_URI'], '/'));
@@ -106,6 +109,36 @@ class Application
             echo $output->render();
         }
 
+    }
+
+    /**
+     * Add new route
+     *
+     * @param string $method GET|POST|DELETE etc,
+     * @param string $route Route Path
+     * @param string $name Set name
+     * @param array $routes List of routes
+     */
+    public function route(string $method = 'GET', string $route = '/', $target = null, string $name = null)
+    {
+        $this->router->map($method, $route, $target, $name);
+        return $this;
+    }
+
+    /**
+     * Add new Route Group
+     *
+     * @param string $prefix URL Prefix to all sub-routes
+     * @param string $controller Set controller for all sub-routes
+     * @param array $routes List of routes
+     */
+    public function routeGroup(string $prefix = '/', string $controller = '', array $routes = [])
+    {
+        $this->router->group([
+                'prefix' => $prefix,
+                'controller' => $controller,
+            ], $routes);
+        return $this;
     }
 
     protected function loadSettings()

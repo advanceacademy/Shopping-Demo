@@ -28,7 +28,7 @@ class Router extends AltoRouter
      */
     public function group(array $options = [], array $routes = []): void
     {
-        $prefix = '/' . trim($options['prefix'] ?? '/', '/') . '/';
+        $prefix = preg_replace('/\/{2,}/', '/', trim($options['prefix']));
         $controller = $options['controller'] ?? '';
 
         foreach ($routes as $route) {

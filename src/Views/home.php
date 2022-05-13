@@ -41,7 +41,9 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <div id="paypal-button-container"></div>
+                                <div class="px-3 py-2">
+                                    <div id="paypal-button-container"></div>
+                                </div>
                             </div>
                         </li>
                     </ul>
