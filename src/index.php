@@ -24,5 +24,5 @@ $router->group(['controller' => '\App\Controllers\UserController', 'prefix' => '
     ['POST',   'reset',    'reset'],
 ]);
 
-$app = new Application(__DIR__, $router);
+$app = new Application($router, __DIR__);
 $app->run($router);

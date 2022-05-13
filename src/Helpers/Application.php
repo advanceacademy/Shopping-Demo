@@ -16,7 +16,7 @@ class Application
     protected $root = __DIR__;
     protected $router = null;
 
-    public function __construct(string $root = __DIR__, Router $router)
+    public function __construct(Router $router, string $root = __DIR__)
     {
         $this->router = $router;
         $this->root = $root;
@@ -103,7 +103,7 @@ class Application
         if ($output instanceof Response) {
             echo $output->getOutput();
         } else if ($output instanceof View) {
-            $output->render();
+            echo $output->render();
         }
 
     }
