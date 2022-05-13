@@ -55,6 +55,7 @@ class Application
                 $callback = $target;
             }
         } catch (Throwable $e) {
+
             $output = (new Response())
                 ->setCode(500)
                 ->setContent(['message' => $e->getMessage()]);

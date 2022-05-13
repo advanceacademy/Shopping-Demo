@@ -42,6 +42,10 @@
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <div class="px-3 py-2">
+                                    <div id="cart">
+
+                                    </div>
+
                                     <div id="paypal-button-container"></div>
                                 </div>
                             </div>
@@ -83,7 +87,7 @@
                                     Цена: <?=$product['price'] ?? '0.00'?>€
                                 </div>
                                 <div class="btn-group">
-                                    <button type="button" class="w-100 btn btn-md btn-warning py-1">
+                                    <button type="button" class="w-100 btn btn-md btn-warning py-1 add-to-cart" data-price="<?=$product['price'] ?? 0.00 ?>">
                                         <i class="fa-solid fa-cart-plus fa-fw"></i>
                                         Добави
                                     </button>
