@@ -77,6 +77,147 @@ $(function() {
         renderCart();
     });
 
+    $("#menu").each(function(i, v) {
+        var $menu = $(v);
+        var $modalLogin = $("#modalLogin");
+        var $modalRegister = $("#modalRegister");
+        var $loginForm = $modalLogin.find("form");
+        var $registerForm = $modalRegister.find("form");
+        var localStorageName = 'user';
+
+        function login(name, suername) {
+            $menu.find('.guest').addClass('d-none');
+            $menu.find('.profile').removeClass('d-none');
+            $("#userName").text(name + ' ' + suername);
+            $modalLogin && $modalLogin.modal('hide');
+        }
+
+        function logout() {
+            $menu.find('.guest').removeClass('d-none');
+            $menu.find('.profile').addClass('d-none');
+            $("#userName").text('');
+            try {
+                localStorage.removeItem(localStorageName);
+            } catch (e) {}
+        }
+
+        $loginForm.on("submit", function(e) {
+            e.preventDefault();
+
+            $loginForm.find('.alert').addClass('d-none');
+
+            var email = $loginForm.find('#inputEmail').val() || '';
+            var password = $loginForm.find('#inputPassword').val() || '';
+
+            if (!email.length || !password.length) {
+                $loginForm.find('.alert')
+                    .removeClass('d-none')
+                    .removeClass('alert-success')
+                    .addClass('alert-danger')
+                    .text('Попълнете Email и Парола');
+            } else {
+                $.ajax({
+                    url: '/api/users/token',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        email: email,
+                        password: password
+                    }),
+                    success: function(data, textStatus) {
+                        localStorage.setItem(localStorageName, JSON.stringify(data));
+                        login(data.user.name, data.user.surname);
+                    },
+                    error: function(jqXHR, textStatus) {
+                        $loginForm.find('.alert')
+                            .removeClass('d-none')
+                            .removeClass('alert-success')
+                            .addClass('alert-danger')
+                            .text(((jqXHR || {}).responseJSON || {}).message);
+                    }
+                });
+            }
+
+            return false;
+        });
+
+        $registerForm.on("submit", function(e) {
+            e.preventDefault();
+
+            $registerForm.find('.alert').addClass('d-none');
+
+            var email = $registerForm.find('#inputRegisterEmail').val() || '';
+            var password = $registerForm.find('#inputRegisterPassword').val() || '';
+            var name = $registerForm.find('#inputRegisterName').val() || '';
+            var surname = $registerForm.find('#inputRegisterSurname').val() || '';
+            var phone = $registerForm.find('#inputRegisterPhone').val() || '';
+
+            if (!email.length || !password.length || !name.length || !surname.length || !phone.length) {
+                $registerForm.find('.alert')
+                    .removeClass('d-none')
+                    .removeClass('alert-success')
+                    .addClass('alert-danger')
+                    .text('Попълнете всички полета.');
+            } else {
+                $.ajax({
+                    url: '/api/users',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        email: email,
+                        password: password,
+                        name: name,
+                        surname: surname,
+                        phone: phone,
+                    }),
+                    success: function(data, textStatus) {
+                        $modalRegister && $modalRegister.modal('hide');
+                    },
+                    error: function(jqXHR, textStatus) {
+                        $registerForm.find('.alert')
+                            .removeClass('d-none')
+                            .removeClass('alert-success')
+                            .addClass('alert-danger')
+                            .text(((jqXHR || {}).responseJSON || {}).message);
+                    }
+                });
+            }
+
+            return false;
+        })
+
+        $("#logoutUser").on("click", function(e) {
+            logout();
+        });
+
+        try {
+            var data = JSON.parse(localStorage.getItem(localStorageName));
+            if (data && ((data || {}).user || {}).id) {
+                $.ajax({
+                    url: '/api/users/' + data.user.id,
+                    method: 'GET',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': 'Bearer ' + data.token,
+                    },
+                    success: function(user, textStatus) {
+                        data.user = user;
+                        localStorage.setItem(localStorageName, JSON.stringify(data));
+                        login(data.user.name, data.user.surname);
+                    },
+                    error: function(jqXHR, textStatus) {
+                        logout();
+                    }
+                });
+            }
+        } catch (e) {
+
+        }
+    });
+
     renderCart();
     paypal.Buttons({
         style: {

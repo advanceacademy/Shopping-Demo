@@ -33,7 +33,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center" id="menu">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center p-0" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                                 <div class="position-relative d-inline-block me-3">
@@ -49,6 +49,29 @@
                                     <div id="paypal-button-container" class="d-none"></div>
                                 </div>
                             </div>
+                        </li>
+                        <li class="nav-item ms-3 guest">
+                            <a href="#" class="nav-link d-flex align-items-center p-0" data-bs-toggle="modal" data-bs-target="#modalLogin">
+                                <div class="position-relative d-inline-block me-2 ">
+                                    <i class="fa-solid fa-user fa-fw fa-2x"></i>
+                                </div>
+                                Потребител
+                            </a>
+                        </li>
+
+                        <li class="nav-item ms-3 dropdown d-none profile">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center p-0" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                <div class="position-relative d-inline-block me-1">
+                                    <i class="fa-solid fa-user fa-fw fa-2x"></i>
+                                </div>
+
+                                <div class="d-inline-block" id="userName">
+
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="#" id="logoutUser">Изход</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -141,6 +164,84 @@
             </div>
         </div>
     </footer>
+
+    <div class="modal fade" id="modalLogin" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-body">
+                        <div class="alert d-none"></div>
+
+                        <div class="row mb-3">
+                            <label for="inputEmail" class="col-sm-2 col-form-label">E-mail</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="inputEmail">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Парола</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="inputPassword">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary me-auto" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalRegister">Регистрация?</button>
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отказ</button>
+                        <button type="submit" class="btn btn-primary">Вход</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalRegister" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-body">
+                        <div class="alert d-none"></div>
+
+                        <div class="row mb-3">
+                            <label for="inputRegisterEmail" class="col-sm-2 col-form-label">E-mail</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="inputRegisterEmail">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputRegisterPassword" class="col-sm-2 col-form-label">Парола</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="inputRegisterPassword">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputRegisterPhone" class="col-sm-2 col-form-label">Телефон</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputRegisterPhone">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputRegisterName" class="col-sm-2 col-form-label">Име</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputRegisterName">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputRegisterSurname" class="col-sm-2 col-form-label">Фамилия</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputRegisterSurname">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отказ</button>
+                        <button type="submit" class="btn btn-primary">Регистрация</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 

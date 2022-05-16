@@ -117,13 +117,8 @@ class UserController extends BaseController
             return $this->errorUnauthorized();
         }
 
-        if (!in_array('admin', $userAuth['roles'] ?? [])) {
+        if ($id != $userAuth['id'] && !in_array('admin', $userAuth['roles'] ?? [])) {
             return $this->errorForbidden();
-        }
-
-        if (!in_array('client', $userAuth['roles'] ?? [])) {
-            $userClient = $userModel->showUser($userAuth['id']);
-
         }
 
         $user = $userModel->showUser($id);
