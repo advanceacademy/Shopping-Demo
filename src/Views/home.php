@@ -89,7 +89,7 @@
                             <p class="card-text"><?=$product['description'] ?? ''?></p>
                             <div class="d-flex justify-content-between align-items-center mt-auto">
                                 <div class="price-tag">
-                                    Цена: <?=$product['price'] ?? '0.00'?>€
+                                    Цена: <?=$product['price'] ?? '0.00'?> лв.
                                 </div>
                                 <div class="btn-group">
                                     <button type="button" class="w-100 btn btn-md btn-warning py-1 add-to-cart">

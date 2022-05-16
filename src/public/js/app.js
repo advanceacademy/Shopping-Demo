@@ -1,8 +1,10 @@
 $(function() {
     var products = [];
-    var sign = '€';
+    var sign = '';
+    var signRight = ' лв.';
     var currency = 'EUR';
     var totalAmount = 0.00;
+    var currencyRatio = 1.95583;
     var $cart = $("#cart");
     var $cartQuantity = $("#cartQuantity");
     var $paypalBtnContainer = $("#paypal-button-container");
@@ -19,7 +21,7 @@ $(function() {
             $output += '<li class="list-group-item list-group-item-action"><div class="row" data-id="' + product.id + '">'
                 + '<div class="col-5">' + product.title + '</div>'
                 + '<div class="col-2 text-center">&times;' + product.quantity + '</div>'
-                + '<div class="col-3 text-end"><strong>' + sign + product.price.toFixed(2) + '</strong></div>'
+                + '<div class="col-3 text-end"><strong>' + sign + product.price.toFixed(2) + signRight +  '</strong></div>'
                 + '<div class="col-2 text-nowrap text-end">'
                 + '<button class="remove btn btn-danger btn-sm px-1 py-0"><i class="fa-solid fa-xmark fa-fw"></i></button>'
                 + '</div></li>'
@@ -37,7 +39,7 @@ $(function() {
                 '<ul class="list-group mb-3 pb-3 border-bottom"><li class="list-group-item list-group-item-action list-group-item-primary">'
                 + '<div class="row">'
                 + '  <div class="col">Общо:</div>'
-                + '  <div class="col-auto text-end"><strong>' + sign + totalAmount.toFixed(2) + '</strong></div>'
+                + '  <div class="col-auto text-end"><strong>' + sign + totalAmount.toFixed(2) + signRight + '</strong></div>'
                 + '</div></li>'
                 + '</ul>'
             );
@@ -91,31 +93,37 @@ $(function() {
                 return null;
             }
 
+            var total = 0.00;
+            var items = products.map(product => {
+                var itemPrice = product.price / currencyRatio;
+                total += (itemPrice * product.quantity);
+
+                return {
+                    name: product.title,
+                    unit_amount: {
+                        currency_code: currency,
+                        value: itemPrice.toFixed(2),
+                    },
+                    quantity: product.quantity,
+                    sku: 'PRODUCT-ID-' + product.id
+                }
+            });
+
             return actions.order.create({
                 intent: "CAPTURE",
                 purchase_units: [{
                     description: "Products from AdvanceAcademy.bg",
                     amount: {
-                        value: totalAmount.toFixed(2),
+                        value: total.toFixed(2),
                         currency_code: currency,
                         breakdown: {
                             item_total: {
                                 currency_code: currency,
-                                value: totalAmount.toFixed(2),
+                                value: total.toFixed(2),
                             }
                         }
                     },
-                    items: products.map(product => {
-                        return {
-                            name: product.title,
-                            unit_amount: {
-                                currency_code: currency,
-                                value: product.price,
-                            },
-                            quantity: product.quantity,
-                            sku: 'PRODUCT-ID-' + product.id
-                        }
-                    }),
+                    items: items,
                 }],
             });
         },
