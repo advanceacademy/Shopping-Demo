@@ -33,20 +33,20 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-cart-shopping fa-fw"></i>
+                            <a class="nav-link dropdown-toggle d-flex align-items-center p-0" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                <div class="position-relative d-inline-block me-3">
+                                    <i class="fa-solid fa-cart-shopping fa-fw fa-2x"></i>
+                                    <span class="badge badge-sm rounded-pill bg-primary position-absolute px-2 py-1" id="cartQuantity" style="bottom:-5px; right:-5px"></span>
+                                </div>
                                 Количка
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <div class="px-3 py-2">
-                                    <div id="cart">
-
-                                    </div>
-
-                                    <div id="paypal-button-container"></div>
+                                <div class="px-3 pt-2">
+                                    <div id="cart"></div>
+                                    <div id="paypal-button-container" class="d-none"></div>
                                 </div>
                             </div>
                         </li>
@@ -74,7 +74,12 @@
             <?php foreach (($products ?? []) as $product): ?>
 
                 <div class="col">
-                    <div class="card shadow-sm h-100">
+                    <div class="card shadow-sm h-100"
+                        data-id="<?=htmlspecialchars($product['id'])?>"
+                        data-title="<?=htmlspecialchars($product['title'])?>"
+                        data-quantity="<?=((int) $product['quantity'])?>"
+                        data-price="<?=number_format($product['price'] ?? 0.00, 2, '.', '') ?>"
+                    >
                         <div class="square-photo">
                             <img src="<?=$product['image'] ?? ''?>" class="w-100 mb-2" />
                         </div>
@@ -87,7 +92,7 @@
                                     Цена: <?=$product['price'] ?? '0.00'?>€
                                 </div>
                                 <div class="btn-group">
-                                    <button type="button" class="w-100 btn btn-md btn-warning py-1 add-to-cart" data-price="<?=$product['price'] ?? 0.00 ?>">
+                                    <button type="button" class="w-100 btn btn-md btn-warning py-1 add-to-cart">
                                         <i class="fa-solid fa-cart-plus fa-fw"></i>
                                         Добави
                                     </button>
