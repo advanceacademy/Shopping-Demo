@@ -9,7 +9,6 @@ use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
-use PayPalHttp\HttpException;
 
 class PaymentController extends BaseController
 {

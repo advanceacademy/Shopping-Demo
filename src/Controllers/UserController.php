@@ -6,9 +6,7 @@ use Exception;
 use App\Helpers\HashPassword;
 use App\Models\UserModel;
 use App\Helpers\JwtToken;
-use Rakit\Validation\Validator;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use App\Helpers\Registry;
 
 class UserController extends BaseController
