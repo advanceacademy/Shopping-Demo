@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Helpers\HashPassword;
-use PDOException;
 use PDO;
 
 class ProductModel extends BaseModel

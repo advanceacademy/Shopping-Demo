@@ -29,4 +29,8 @@ $app->routeGroup('/api/users/', '\App\Controllers\UserController', [
     ['POST',   'reset',    'reset'],
 ]);
 
+$app->routeGroup('/api/payments/', '\App\Controllers\PaymentController', [
+    ['POST',   'capture/[a:order]',         'capture'],
+]);
+
 $app->run();

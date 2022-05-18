@@ -47,6 +47,11 @@
                                 <div class="px-3 pt-2">
                                     <div id="cart"></div>
                                     <div id="paypal-button-container" class="d-none"></div>
+                                    <div id="cartSigning" class="d-none text-center">
+                                        <a href="#" class="btn btn-primary mb-2 d-inline-block" data-bs-toggle="modal" data-bs-target="#modalLogin">
+                                            Вход с потребител
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </li>

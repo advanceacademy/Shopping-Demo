@@ -1,4 +1,5 @@
 $(function() {
+    var signedUser = null;
     var products = [];
     var sign = '';
     var signRight = ' лв.';
@@ -6,10 +7,12 @@ $(function() {
     var totalAmount = 0.00;
     var currencyRatio = 1.95583;
     var $cart = $("#cart");
+    var $cartSigning = $("#cartSigning");
     var $cartQuantity = $("#cartQuantity");
     var $paypalBtnContainer = $("#paypal-button-container");
     var renderCart = function() {
         $cart.html('<p class="text-center mb-2 alert alert-warning py-1">Количката е празна.</p>');
+        $cartSigning.removeClass('d-none');
         $paypalBtnContainer.addClass('d-none');
         $cartQuantity.text('');
 
@@ -43,7 +46,13 @@ $(function() {
                 + '</div></li>'
                 + '</ul>'
             );
+        }
+
+        if (quantity && signedUser && signedUser.id > 0) {
             $paypalBtnContainer.removeClass('d-none');
+            $cartSigning.addClass('d-none');
+        } else if (!quantity) {
+            $cartSigning.addClass('d-none');
         }
     };
 
@@ -73,7 +82,6 @@ $(function() {
                 quantity: 1,
             });
         }
-
         renderCart();
     });
 
@@ -85,11 +93,13 @@ $(function() {
         var $registerForm = $modalRegister.find("form");
         var localStorageName = 'user';
 
-        function login(name, suername) {
+        function login(user) {
             $menu.find('.guest').addClass('d-none');
             $menu.find('.profile').removeClass('d-none');
-            $("#userName").text(name + ' ' + suername);
+            $("#userName").text(user.name + ' ' + user.surname);
             $modalLogin && $modalLogin.modal('hide');
+            signedUser = user;
+            renderCart();
         }
 
         function logout() {
@@ -98,7 +108,10 @@ $(function() {
             $("#userName").text('');
             try {
                 localStorage.removeItem(localStorageName);
+
             } catch (e) {}
+            signedUser = null;
+            renderCart();
         }
 
         $loginForm.on("submit", function(e) {
@@ -127,7 +140,7 @@ $(function() {
                     }),
                     success: function(data, textStatus) {
                         localStorage.setItem(localStorageName, JSON.stringify(data));
-                        login(data.user.name, data.user.surname);
+                        login(data.user);
                     },
                     error: function(jqXHR, textStatus) {
                         $loginForm.find('.alert')
@@ -206,7 +219,7 @@ $(function() {
                     success: function(user, textStatus) {
                         data.user = user;
                         localStorage.setItem(localStorageName, JSON.stringify(data));
-                        login(data.user.name, data.user.surname);
+                        login(data.user);
                     },
                     error: function(jqXHR, textStatus) {
                         logout();
@@ -254,6 +267,7 @@ $(function() {
                 intent: "CAPTURE",
                 purchase_units: [{
                     description: "Products from AdvanceAcademy.bg",
+                    custom_id: signedUser.id,
                     amount: {
                         value: total.toFixed(2),
                         currency_code: currency,
@@ -270,10 +284,15 @@ $(function() {
         },
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-                console.log("Transaction Details", details);
                 products = [];
                 renderCart();
-                // alert('Transaction completed by ' + details.payer.name.given_name);
+
+                $.ajax({
+                    url: '/api/payments/capture/' + details.id,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json'
+                });
             });
         },
         onCancel: function(data) {
